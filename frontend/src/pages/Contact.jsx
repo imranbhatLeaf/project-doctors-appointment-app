@@ -1,4 +1,23 @@
 import React, { useState } from 'react'
+import { motion } from 'motion/react'
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.45,
+      ease: 'easeOut',
+      staggerChildren: 0.08
+    }
+  }
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } }
+}
 
 const Contact = () => {
   const [form, setForm] = useState({
@@ -37,22 +56,27 @@ const Contact = () => {
   }
 
   return (
-    <div className='px-4 sm:px-6 lg:px-12 py-10'>
-      <div className='max-w-6xl mx-auto flex flex-col gap-10'>
+    <motion.div
+      initial='hidden'
+      animate='visible'
+      variants={containerVariants}
+      className='px-4 sm:px-6 lg:px-12 py-10'
+    >
+      <motion.div variants={itemVariants} className='max-w-6xl mx-auto flex flex-col gap-10'>
         {/* Hero */}
-        <div className='rounded-2xl bg-primary p-8 sm:p-10 text-white'>
+        <motion.div variants={itemVariants} className='rounded-2xl bg-primary p-8 sm:p-10 text-white'>
           <p className='text-sm opacity-90'>DOCPoint Support</p>
           <h1 className='text-3xl sm:text-4xl font-semibold mt-2'>Contact Us</h1>
           <p className='mt-3 text-sm sm:text-base opacity-90 max-w-2xl'>
             Have a question about appointments, doctors, or services? Send us a message and we will get back to you as
             soon as possible.
           </p>
-        </div>
+        </motion.div>
 
-        <div className='grid lg:grid-cols-3 gap-6'>
+        <motion.div variants={itemVariants} className='grid lg:grid-cols-3 gap-6'>
           {/* Contact info */}
           <div className='lg:col-span-1'>
-            <div className='flex flex-col gap-4'>
+            <motion.div variants={containerVariants} className='flex flex-col gap-4'>
               <InfoCard
                 title='Phone'
                 value='+1 (555) 123-4567'
@@ -86,7 +110,7 @@ const Contact = () => {
 
               <InfoCard
                 title='Address'
-                value='123 Health Street, Suite 200, New York, NY 10001'
+                value='Lal Chowk, Srinagar, Jammu & Kashmir, India'
                 icon={
                   <svg width='22' height='22' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
                     <path
@@ -120,15 +144,15 @@ const Contact = () => {
                   </svg>
                 }
               />
-            </div>
+            </motion.div>
           </div>
 
           {/* Map + form */}
           <div className='lg:col-span-2 flex flex-col gap-6'>
-            <div className='rounded-2xl border border-gray-200 bg-white overflow-hidden'>
+            <motion.div variants={itemVariants} className='rounded-2xl border border-gray-200 bg-white overflow-hidden'>
               <div className='p-6 border-b border-gray-200'>
                 <h2 className='text-lg font-semibold'>Visit Us</h2>
-                <p className='text-sm text-gray-600 mt-1'>We are located at the address listed above.</p>
+                <p className='text-sm text-gray-600 mt-1'>Visit our Srinagar office at the address listed above.</p>
               </div>
 
               <div className='w-full h-64 sm:h-72 bg-gray-100'>
@@ -137,12 +161,12 @@ const Contact = () => {
                   className='w-full h-full'
                   loading='lazy'
                   referrerPolicy='no-referrer-when-downgrade'
-                  src='https://www.google.com/maps?q=New%20York%20NY%2010001&output=embed'
+                  src='https://www.google.com/maps?q=Srinagar%20Jammu%20and%20Kashmir&output=embed'
                 />
               </div>
-            </div>
+            </motion.div>
 
-            <div className='rounded-2xl border border-gray-200 bg-white p-6 sm:p-8'>
+            <motion.div variants={itemVariants} className='rounded-2xl border border-gray-200 bg-white p-6 sm:p-8'>
               <h2 className='text-lg font-semibold'>Send a Message</h2>
               <p className='text-sm text-gray-600 mt-1'>We will respond within 1-2 business days.</p>
 
@@ -215,25 +239,31 @@ const Contact = () => {
                     By submitting, you agree to be contacted about your request.
                   </p>
 
-                  <button
+                  <motion.button
                     type='submit'
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     className='bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:scale-[1.01] transition-all duration-150 disabled:opacity-60'
                   >
                     Send Message
-                  </button>
+                  </motion.button>
                 </div>
               </form>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   )
 }
 
 const InfoCard = ({ title, value, icon }) => {
   return (
-    <div className='rounded-2xl border border-gray-200 bg-white p-5'>
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ y: -4, boxShadow: '0 8px 18px rgba(0,0,0,0.08)' }}
+      className='rounded-2xl border border-gray-200 bg-white p-5'
+    >
       <div className='flex items-start gap-3'>
         <div className='text-primary mt-0.5'>{icon}</div>
         <div>
@@ -241,7 +271,7 @@ const InfoCard = ({ title, value, icon }) => {
           <p className='text-sm text-gray-600 mt-1 leading-relaxed'>{value}</p>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

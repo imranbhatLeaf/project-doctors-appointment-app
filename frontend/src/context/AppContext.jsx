@@ -112,6 +112,29 @@ const AppContextProvider = (props) => {
     return { ok: true, booking }
   }
 
+  const updateUserProfile = ({ name, email, phone, gender, dob, address }) => {
+    if (!auth.isLoggedIn || auth.role !== 'user' || !auth.profile?.id) {
+      return { ok: false, message: 'Please login as patient first.' }
+    }
+
+    const nextProfile = {
+      ...auth.profile,
+      name: (name ?? auth.profile.name ?? '').trim(),
+      email: (email ?? auth.profile.email ?? '').trim().toLowerCase(),
+      phone: phone ?? auth.profile.phone ?? '',
+      gender: gender ?? auth.profile.gender ?? '',
+      dob: dob ?? auth.profile.dob ?? '',
+      address: address ?? auth.profile.address ?? ''
+    }
+
+    const updatedUsers = registeredUsers.map((user) =>
+      user.id === auth.profile.id ? { ...user, ...nextProfile } : user
+    )
+    persistUsers(updatedUsers)
+    persistAuth({ ...auth, profile: nextProfile })
+    return { ok: true, profile: nextProfile }
+  }
+
   const myAppointments = useMemo(() => {
     if (!auth.isLoggedIn || auth.role !== 'user' || !auth.profile?.id) return []
     return appointments.filter((item) => item.userId === auth.profile.id)
@@ -125,9 +148,10 @@ const AppContextProvider = (props) => {
       login,
       logout,
       addAppointment,
-      myAppointments
+      myAppointments,
+      updateUserProfile
     }),
-    [auth, doctors, myAppointments]
+    [auth, doctors, myAppointments, registeredUsers]
   )
 
   return <AppContext.Provider value={value}>{props.children}</AppContext.Provider>
